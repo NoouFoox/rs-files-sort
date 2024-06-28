@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "file-size-sort"
+name = "file-sort"
 version = "0.1.0"
