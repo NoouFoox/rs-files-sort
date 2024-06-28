@@ -1,10 +1,20 @@
-use std::fs;
+use std::{env, fs};
 use std::path::{Path, PathBuf};
 use std::io;
 
 fn main() {
-    let path_str = "/Users/junhao/Downloads/textures";
-    let path = Path::new(&path_str);
+    let dir_path = env::args().enumerate() // 枚举所有命令行参数
+        .find_map(|(i, arg)| {
+            if arg == "dir" {
+                env::args().nth(i + 1) // 获取 `--dir` 参数后面的值
+            } else {
+                None
+            }
+        })
+        .map(PathBuf::from) // 将参数值转换为 PathBuf
+        .or_else(|| env::current_dir().ok()) // 如果没有 `--dir` 参数，使用当前目录
+        .expect("Failed to determine directory");
+    let path = Path::new(&dir_path);
 
     match calculate_directory_size(&path, path) {
         Ok(files) => {
